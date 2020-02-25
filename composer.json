@@ -1,0 +1,20 @@
+{
+  "name": "Siarko/phirefox",
+  "description": "-",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mateusz Korbal",
+      "email": "labroqu@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Siarko\\" : "src/"
+    }
+  },
+  "require": {
+    "ext-pcntl": "*"
+  }
+}
