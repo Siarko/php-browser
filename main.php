@@ -1,31 +1,24 @@
 <?php
 declare(ticks = 1);
 
+use Siarko\bootstrap\Bootstrap;
+use Siarko\bootstrap\events\Events;
+use Siarko\io\Keyboard;
+use Siarko\tab\tabController\TabController;
+
+if(!file_exists('vendor')){
+    echo "No vendor directory detected! Run 'composer install'.";
+    exit(1);
+}
+
 require_once "vendor/autoload.php";
 
-$b = 0;
-
-$bootstrap = new \Siarko\bootstrap\Bootstrap();
-$bootstrap->setProcess(function() use (&$b){
-    echo (".");
-    usleep(10000);
-}, \Siarko\bootstrap\events\Events::IDLE);
-$bootstrap->setProcess(function($keyCode, $key) use (&$b){
-    $b = 0;
-    echo "\nKey ".$key."\n";
-    if($key == "q"){
-        exit(0);
-    }
-}, \Siarko\bootstrap\events\Events::KEYUP);
-$bootstrap->addEventProvider(\Siarko\io\Keyboard::init());
-//$bootstrap->run();
-//\Siarko\io\Console::get()->updateScreenSize();
-\Siarko\io\Console::get();
-\Siarko\io\Console::setPosition(0,0);
-echo("Hello world");
-\Siarko\io\Console::setPosition(10,10);
-echo "Hello 2";
-sleep(2);
-
-
-
+$bootstrap = new Bootstrap();
+$bootstrap->setProcess(function() {
+    \Siarko\mainContext\MainContext::get()->update();
+}, Events::IDLE);
+$bootstrap->setProcess(function($keyCode, $key) {
+    \Siarko\mainContext\MainContext::get()->receiveKeyUp($keyCode, $key);
+}, Events::KEYUP);
+$bootstrap->addEventProvider(Keyboard::init());
+$bootstrap->run();

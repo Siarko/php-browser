@@ -15,6 +15,7 @@
     }
   },
   "require": {
-    "ext-pcntl": "*"
+    "ext-pcntl": "*",
+    "ext-ncurses": "*"
   }
 }

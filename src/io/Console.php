@@ -7,6 +7,9 @@ namespace Siarko\io;
 use Siarko\paradigm\Singleton;
 use Siarko\util\math\Vec;
 
+/**
+ * @method static self get()
+ * */
 class Console
 {
 
@@ -19,22 +22,40 @@ class Console
         $this->initScreen();
     }
 
-    public static function setPosition($x, $y){
-        echo "\033[".$x.";".$y."f";
+    public function getPosition(){
+        return new Vec();
     }
 
-    public function updateScreenSize() {
-        preg_match_all("/rows.([0-9]+);.columns.([0-9]+);/", strtolower(exec('stty -a |grep columns')), $output);
-        if(sizeof($output) == 3) {
-            $this->screenSize = new Vec($output[1][0], $output[2][0]);
+    public function setPosition($x, $y = 0){
+        if($x instanceof Vec){
+            $y = $x->getX();
+            $x = $x->getX();
+        }
+        echo "\033[".((int)$y).";".((int)$x)."f";
+    }
+
+    /**
+     * @return Vec
+     */
+    public function getScreenSize() {
+        if($this->screenSize === null){
+            $this->updateScreenSize();
         }
         return $this->screenSize;
     }
 
+    private function updateScreenSize(){
+        $this->screenSize = new Vec(
+            exec('tput cols'),
+            exec('tput lines')
+        );
+    }
+
     private function initScreen(){
-        system('tput smcup');
+        system('clear');
+        //system('tput smcup');
         register_shutdown_function(function(){
-            $this->cleanup();
+        //    $this->cleanup();
         });
         pcntl_signal(SIGINT, function(){$this->cleanup();});
         pcntl_signal(SIGUSR1, function(){$this->cleanup();});

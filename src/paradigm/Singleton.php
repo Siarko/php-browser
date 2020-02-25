@@ -16,4 +16,8 @@ trait Singleton
         return static::$instance;
     }
 
+    public static function _initialized(){
+        return (static::$instance != null);
+    }
+
 }
