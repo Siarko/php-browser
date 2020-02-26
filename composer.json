@@ -16,6 +16,7 @@
   },
   "require": {
     "ext-pcntl": "*",
-    "ext-ncurses": "*"
+    "paquettg/php-html-parser": "2.2.1",
+    "sabberworm/php-css-parser": "8.3.0"
   }
 }
